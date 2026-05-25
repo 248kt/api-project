@@ -7,6 +7,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 import { AnimatedHeader, AnimatedEndpoints, AnimatedEndpoint } from "@/components/ApiDetailMotion";
 import { ApiCard } from "@/components/ApiCard";
 import { TryItPanel } from "@/components/TryItPanel";
+import { ShareButton } from "@/components/ShareButton";
 import type { Metadata } from "next";
 import type { Language } from "@/lib/codeGen";
 
@@ -111,6 +112,7 @@ export default async function ApiDetailPage({ params }: Props) {
               <Globe size={13} />
               Website
             </a>
+            <ShareButton name={api.name} />
           </div>
         </div>
 

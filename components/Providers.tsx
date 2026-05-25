@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
+import { ToastProvider } from "./ToastProvider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       themes={["apilight", "apidark"]}
       enableSystem={false}
     >
-      {children}
+      <ToastProvider>{children}</ToastProvider>
     </ThemeProvider>
   );
 }

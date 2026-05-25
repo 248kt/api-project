@@ -11,6 +11,7 @@ const SHORTCUTS = [
   { key: "g h",    action: "Go home"              },
   { key: "g a",    action: "Go to AI Creator"     },
   { key: "g s",    action: "Submit an API"        },
+  { key: "g c",    action: "Compare APIs"         },
 ];
 
 interface Props {

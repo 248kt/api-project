@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Keyboard, PlusCircle } from "lucide-react";
+import { Keyboard, PlusCircle, ScrollText } from "lucide-react";
 import { useState, useCallback } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
@@ -44,6 +44,11 @@ export function Navbar() {
       ignoreInInput: true,
     },
     {
+      key: "c",
+      handler: () => { if (gPressed) { router.push("/compare"); setGPressed(false); } },
+      ignoreInInput: true,
+    },
+    {
       key: "t",
       handler: () => setTheme(theme === "apidark" ? "apilight" : "apidark"),
       ignoreInInput: true,
@@ -67,6 +72,14 @@ export function Navbar() {
 
           {/* Right controls */}
           <div className="flex items-center gap-1">
+            <Link
+              href="/changelog"
+              className="btn btn-ghost btn-sm gap-1.5 text-base-content/60 hover:text-base-content hidden sm:inline-flex"
+              title="Changelog"
+            >
+              <ScrollText size={14} />
+              Changelog
+            </Link>
             <Link
               href="/submit"
               className="btn btn-ghost btn-sm gap-1.5 text-base-content/60 hover:text-base-content hidden sm:inline-flex"
