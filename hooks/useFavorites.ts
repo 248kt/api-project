@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 
-const STORAGE_KEY = "apivault:favorites";
+const STORAGE_KEY = "devdex:favorites";
 
 export function useFavorites() {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());

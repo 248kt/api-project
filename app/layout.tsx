@@ -9,8 +9,8 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata: Metadata = {
-  title: "apivault — Discover APIs",
-  description: "Browse 30+ APIs across 14 categories with live code examples in JavaScript, Python, Go, Ruby, cURL, and PHP.",
+  title: "Devdex — Discover APIs",
+  description: "Browse 70+ APIs across 22 categories with live code examples, a Try It panel, and side-by-side compare.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

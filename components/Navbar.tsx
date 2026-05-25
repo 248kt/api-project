@@ -66,8 +66,8 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1.5 shrink-0">
-            <span className="font-bold text-lg tracking-tight">api</span>
-            <span className="font-bold text-lg tracking-tight text-base-content/40">vault</span>
+            <span className="font-bold text-lg tracking-tight">dev</span>
+            <span className="font-bold text-lg tracking-tight text-base-content/40">dex</span>
           </Link>
 
           {/* Right controls */}

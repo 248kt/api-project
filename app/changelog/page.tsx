@@ -3,8 +3,8 @@ import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Changelog — apivault",
-  description: "A log of APIs added and features shipped to apivault.",
+  title: "Changelog — Devdex",
+  description: "A log of APIs added and features shipped to Devdex.",
 };
 
 const ENTRIES = [
@@ -41,7 +41,7 @@ const ENTRIES = [
     date: "April 2026",
     title: "Initial launch — 29 APIs",
     items: [
-      "Launched apivault with 29 curated APIs",
+      "Launched Devdex with 29 curated APIs",
       "Categories: AI & ML, Weather, Finance, Maps, Social, Communication, Utilities, News, and more",
       "APIs include: OpenAI, Anthropic, OpenWeather, WeatherAPI, CoinGecko, Alpha Vantage, Spotify, TMDB, GitHub, Twilio, SendGrid, NewsAPI, JSONPlaceholder, and others",
       "Fuzzy search with Fuse.js across name, tagline, description, and tags",

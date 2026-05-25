@@ -51,8 +51,8 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
 
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", marginBottom: "auto" }}>
-          <span style={{ color: "#fff", fontWeight: 700, fontSize: 18 }}>api</span>
-          <span style={{ color: "rgba(255,255,255,0.3)", fontWeight: 700, fontSize: 18 }}>vault</span>
+          <span style={{ color: "#fff", fontWeight: 700, fontSize: 18 }}>dev</span>
+          <span style={{ color: "rgba(255,255,255,0.3)", fontWeight: 700, fontSize: 18 }}>dex</span>
         </div>
 
         {/* Center content */}

@@ -49,8 +49,8 @@ export default function OGImage() {
 
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", marginBottom: 48 }}>
-          <span style={{ color: "#fff", fontWeight: 700, fontSize: 22, letterSpacing: -0.5 }}>api</span>
-          <span style={{ color: "rgba(255,255,255,0.3)", fontWeight: 700, fontSize: 22 }}>vault</span>
+          <span style={{ color: "#fff", fontWeight: 700, fontSize: 22, letterSpacing: -0.5 }}>dev</span>
+          <span style={{ color: "rgba(255,255,255,0.3)", fontWeight: 700, fontSize: 22 }}>dex</span>
         </div>
 
         {/* Headline */}

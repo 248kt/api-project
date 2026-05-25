@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Devdex
 
-## Getting Started
+A curated directory of 70+ public APIs with live code examples, a Try It panel, and side-by-side compare. Free to use at [api-project-xi-kohl.vercel.app](https://api-project-xi-kohl.vercel.app).
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **70+ APIs** across 22 categories — AI, Auth, Payments, Database, Storage, Search, Maps, Weather, Finance, and more
+- **Fuzzy search** across name, tagline, description, and tags
+- **Try It panel** — send live requests directly from the browser (proxied securely)
+- **Compare mode** — select up to 4 APIs and compare them side-by-side
+- **Code examples** in cURL, JavaScript, Python, and Go for every endpoint
+- **Auth type filter** and category pills with live counts
+- **Favorites** — star APIs and find them instantly under the Starred filter
+- **OG images** for every API detail page
+- **Keyboard shortcuts** — `/` to search, `g h/a/s/c` to navigate, `t` to toggle theme, `?` for the shortcuts modal
+- Dark and light themes
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Next.js](https://nextjs.org) 16 (App Router, static generation)
+- [Tailwind CSS](https://tailwindcss.com) v4 + [DaisyUI](https://daisyui.com) v5
+- [Framer Motion](https://www.framer.com/motion/) for animations
+- [Fuse.js](https://fusejs.io) for fuzzy search
+- Deployed on [Vercel](https://vercel.com)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Suggesting an API
 
-## Learn More
+Use the **Submit API** button on the site to open a pre-filled GitHub issue. All suggestions are reviewed before being added.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The site is **free to use**. The source code is proprietary — all rights reserved. You may not copy, distribute, or use this code in your own projects without explicit written permission from the author.
