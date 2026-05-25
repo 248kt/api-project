@@ -1,26 +1,108 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ── Custom themes ────────────────────────────────────────── */
+
+:root,
+[data-theme="apilight"] {
+  color-scheme: light;
+
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(98% 0 0);
+  --color-base-300: oklch(94% 0 0);
+  --color-base-content: oklch(9% 0 0);
+
+  --color-primary: oklch(0% 0 0);
+  --color-primary-content: oklch(100% 0 0);
+
+  --color-secondary: oklch(35% 0 0);
+  --color-secondary-content: oklch(100% 0 0);
+
+  --color-accent: oklch(18% 0 0);
+  --color-accent-content: oklch(100% 0 0);
+
+  --color-neutral: oklch(50% 0 0);
+  --color-neutral-content: oklch(98% 0 0);
+
+  --color-info: oklch(60% 0.18 240);
+  --color-success: oklch(65% 0.18 145);
+  --color-warning: oklch(78% 0.19 80);
+  --color-error: oklch(62% 0.22 25);
+
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="apidark"] {
+  color-scheme: dark;
+
+  --color-base-100: oklch(0% 0 0);
+  --color-base-200: oklch(7% 0 0);
+  --color-base-300: oklch(12% 0 0);
+  --color-base-content: oklch(95% 0 0);
+
+  --color-primary: oklch(100% 0 0);
+  --color-primary-content: oklch(0% 0 0);
+
+  --color-secondary: oklch(75% 0 0);
+  --color-secondary-content: oklch(10% 0 0);
+
+  --color-accent: oklch(88% 0 0);
+  --color-accent-content: oklch(10% 0 0);
+
+  --color-neutral: oklch(30% 0 0);
+  --color-neutral-content: oklch(85% 0 0);
+
+  --color-info: oklch(65% 0.18 240);
+  --color-success: oklch(68% 0.18 145);
+  --color-warning: oklch(80% 0.19 80);
+  --color-error: oklch(65% 0.22 25);
+
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base ─────────────────────────────────────────────────── */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Thin scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: oklch(var(--color-neutral) / 0.3);
+  border-radius: 2px;
+}
+
+/* Smooth theme transitions (background + border only) */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.1s ease;
+}
+
+a, button, [role="button"] {
+  transition: all 0.1s ease;
 }
