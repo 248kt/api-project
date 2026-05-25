@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Keyboard, PlusCircle, ScrollText } from "lucide-react";
+import { Keyboard, PlusCircle, ScrollText, GitCompareArrows } from "lucide-react";
 import { useState, useCallback } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
@@ -88,12 +88,28 @@ export function Navbar() {
               Submit API
             </Link>
             <Link
+              href="/compare"
+              className="btn btn-ghost btn-sm gap-1.5 text-base-content/60 hover:text-base-content hidden sm:inline-flex"
+              title="Compare APIs (g c)"
+            >
+              <GitCompareArrows size={14} />
+              Compare
+            </Link>
+            <Link
               href="/submit"
               className="btn btn-ghost btn-sm btn-square sm:hidden text-base-content/60"
               title="Submit an API"
               aria-label="Submit an API"
             >
               <PlusCircle size={16} />
+            </Link>
+            <Link
+              href="/compare"
+              className="btn btn-ghost btn-sm btn-square sm:hidden text-base-content/60"
+              title="Compare APIs"
+              aria-label="Compare APIs"
+            >
+              <GitCompareArrows size={16} />
             </Link>
             <button
               onClick={() => setShortcutsOpen(true)}

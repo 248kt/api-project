@@ -144,7 +144,7 @@ export function ApiCard({
             className={`p-1 rounded transition-all duration-150 ${
               isComparing
                 ? "text-primary opacity-100"
-                : "text-base-content/20 opacity-0 group-hover:opacity-100 hover:!text-primary"
+                : "text-base-content/20 opacity-30 group-hover:opacity-100 hover:!text-primary"
             }`}
           >
             <GitCompareArrows size={13} strokeWidth={isComparing ? 2 : 1.5} />
