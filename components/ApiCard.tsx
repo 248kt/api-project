@@ -83,7 +83,7 @@ export function ApiCard({
       >
         <div className="flex flex-col h-full gap-3">
           {/* Top row: name + optional New badge */}
-          <div className="flex items-center gap-2 pr-16">
+          <div className="flex items-center gap-2 pr-24">
             <h3 className="font-semibold text-base leading-snug group-hover:text-base-content transition-colors">
               {api.name}
             </h3>
