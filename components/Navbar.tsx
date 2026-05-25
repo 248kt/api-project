@@ -65,9 +65,8 @@ export function Navbar() {
       <header className="sticky top-0 z-40 w-full border-b border-base-300 bg-base-100/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-1.5 shrink-0">
-            <span className="font-bold text-lg tracking-tight">API</span>
-            <span className="font-bold text-lg tracking-tight text-base-content/40">Yard</span>
+          <Link href="/" className="shrink-0">
+            <span className="font-bold text-lg tracking-tight">API</span><span className="font-bold text-lg tracking-tight text-base-content/40">Yard</span>
           </Link>
 
           {/* Right controls */}

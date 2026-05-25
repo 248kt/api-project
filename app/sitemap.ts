@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { APIS } from "@/data/apis";
 import { CATEGORIES } from "@/data/categories";
 
-const BASE = "https://api-project-xi-kohl.vercel.app";
+const BASE = "https://apiyard.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const apiPages: MetadataRoute.Sitemap = APIS.map((api) => ({
