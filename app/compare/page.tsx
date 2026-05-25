@@ -1,30 +1,28 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Globe, X, Check, Minus } from "lucide-react";
-import { getApiBySlug } from "@/data/apis";
+import { ArrowLeft, ExternalLink, Globe, X, Check, Minus, Search, Plus } from "lucide-react";
+import { APIS, getApiBySlug } from "@/data/apis";
 import { CATEGORIES } from "@/data/categories";
 import type { Api } from "@/data/apis";
 
-function CompareTable({ apis }: { apis: Api[] }) {
-  const router = useRouter();
+// ── Auth labels ────────────────────────────────────────────────
+const AUTH_LABELS: Record<string, string> = {
+  none: "No Auth", apiKey: "API Key", bearer: "Bearer", oauth2: "OAuth 2.0",
+};
 
+// ── Compare table ──────────────────────────────────────────────
+function CompareTable({ apis, onRemove }: { apis: Api[]; onRemove: (slug: string) => void }) {
   const rows: { label: string; render: (a: Api) => React.ReactNode }[] = [
     {
       label: "Category",
-      render: (a) => {
-        const cat = CATEGORIES.find((c) => c.slug === a.category);
-        return cat?.label ?? a.category;
-      },
+      render: (a) => CATEGORIES.find((c) => c.slug === a.category)?.label ?? a.category,
     },
     {
       label: "Auth",
-      render: (a) => {
-        const labels: Record<string, string> = { none: "No Auth", apiKey: "API Key", bearer: "Bearer", oauth2: "OAuth 2.0" };
-        return labels[a.authType];
-      },
+      render: (a) => AUTH_LABELS[a.authType],
     },
     {
       label: "Free tier",
@@ -73,11 +71,11 @@ function CompareTable({ apis }: { apis: Api[] }) {
   ];
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-xl border border-base-300">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-base-300">
-            <th className="text-left py-3 pr-6 text-xs font-medium text-base-content/40 uppercase tracking-widest w-32">
+            <th className="text-left py-3 pr-6 pl-5 text-xs font-medium text-base-content/40 uppercase tracking-widest w-32">
               API
             </th>
             {apis.map((a) => (
@@ -90,12 +88,9 @@ function CompareTable({ apis }: { apis: Api[] }) {
                     <p className="text-xs font-normal text-base-content/50 mt-0.5 line-clamp-1">{a.tagline}</p>
                   </div>
                   <button
-                    onClick={() => {
-                      const remaining = apis.filter((x) => x.slug !== a.slug).map((x) => x.slug);
-                      if (remaining.length === 0) router.push("/");
-                      else router.push(`/compare?apis=${remaining.join(",")}`);
-                    }}
-                    className="text-base-content/20 hover:text-base-content/60 shrink-0 mt-0.5"
+                    onClick={() => onRemove(a.slug)}
+                    className="text-base-content/20 hover:text-base-content/60 shrink-0 mt-0.5 transition-colors"
+                    title="Remove from compare"
                   >
                     <X size={13} />
                   </button>
@@ -107,7 +102,7 @@ function CompareTable({ apis }: { apis: Api[] }) {
         <tbody>
           {rows.map(({ label, render }) => (
             <tr key={label} className="border-b border-base-300/50 hover:bg-base-200/40">
-              <td className="py-4 pr-6 text-xs font-medium text-base-content/40 uppercase tracking-widest align-top">
+              <td className="py-4 pr-6 pl-5 text-xs font-medium text-base-content/40 uppercase tracking-widest align-top">
                 {label}
               </td>
               {apis.map((a) => (
@@ -123,15 +118,166 @@ function CompareTable({ apis }: { apis: Api[] }) {
   );
 }
 
+// ── API picker ─────────────────────────────────────────────────
+function ApiPicker({
+  selected,
+  onToggle,
+}: {
+  selected: Set<string>;
+  onToggle: (slug: string) => void;
+}) {
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  const filtered = useMemo(() => {
+    let list = APIS;
+    if (activeCategory !== "all") list = list.filter((a) => a.category === activeCategory);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter(
+        (a) =>
+          a.name.toLowerCase().includes(q) ||
+          a.tagline.toLowerCase().includes(q) ||
+          a.tags.some((t) => t.toLowerCase().includes(q))
+      );
+    }
+    return list;
+  }, [search, activeCategory]);
+
+  const atMax = selected.size >= 4;
+
+  return (
+    <div className="border border-base-300 rounded-xl overflow-hidden">
+      {/* Picker header */}
+      <div className="px-4 py-3 border-b border-base-300 bg-base-200/50">
+        <div className="flex items-center gap-3">
+          <div className="relative flex-1">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/30 pointer-events-none" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search APIs…"
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-base-300 bg-base-100 text-sm outline-none focus:border-base-content/40 transition-all placeholder:text-base-content/30"
+            />
+          </div>
+          <span className="text-xs text-base-content/40 shrink-0 tabular-nums">
+            {selected.size}/4 selected
+          </span>
+        </div>
+
+        {/* Category filter */}
+        <div className="flex gap-1.5 overflow-x-auto no-scrollbar mt-2.5 pb-0.5">
+          {[{ slug: "all", label: "All" }, ...CATEGORIES].map((c) => (
+            <button
+              key={c.slug}
+              onClick={() => setActiveCategory(c.slug)}
+              className={`shrink-0 px-2.5 py-0.5 rounded-full text-xs font-medium transition-all ${
+                activeCategory === c.slug
+                  ? "bg-base-content text-base-100"
+                  : "border border-base-300 text-base-content/50 hover:text-base-content"
+              }`}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* API list */}
+      <div className="overflow-y-auto max-h-72">
+        {filtered.length === 0 ? (
+          <p className="text-sm text-base-content/30 text-center py-8">No APIs found</p>
+        ) : (
+          <div className="divide-y divide-base-300/50">
+            {filtered.map((api) => {
+              const isSelected = selected.has(api.slug);
+              const isDisabled = atMax && !isSelected;
+              const category = CATEGORIES.find((c) => c.slug === api.category);
+
+              return (
+                <button
+                  key={api.slug}
+                  onClick={() => !isDisabled && onToggle(api.slug)}
+                  disabled={isDisabled}
+                  className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-left transition-colors ${
+                    isSelected
+                      ? "bg-primary/8"
+                      : isDisabled
+                      ? "opacity-35 cursor-not-allowed"
+                      : "hover:bg-base-200/60"
+                  }`}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    {/* Check / plus indicator */}
+                    <div className={`shrink-0 w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                      isSelected
+                        ? "bg-primary border-primary text-primary-content"
+                        : "border-base-300"
+                    }`}>
+                      {isSelected
+                        ? <Check size={11} strokeWidth={2.5} />
+                        : <Plus size={10} className="text-base-content/20" />
+                      }
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium truncate">{api.name}</span>
+                        {api.freeTier && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 shrink-0">
+                            Free
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-base-content/40 truncate">{api.tagline}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-xs text-base-content/30 hidden sm:block">{category?.label}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full border border-base-300 text-base-content/40">
+                      {AUTH_LABELS[api.authType]}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Main content ───────────────────────────────────────────────
 function CompareContent() {
   const searchParams = useSearchParams();
-  const slugs = (searchParams.get("apis") ?? "")
+  const router = useRouter();
+
+  const initialSlugs = (searchParams.get("apis") ?? "")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean)
     .slice(0, 4);
 
-  const apis = slugs.map(getApiBySlug).filter((a): a is Api => a !== undefined);
+  const [selected, setSelected] = useState<Set<string>>(new Set(initialSlugs));
+
+  function toggle(slug: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(slug)) {
+        next.delete(slug);
+      } else if (next.size < 4) {
+        next.add(slug);
+      }
+      const slugs = [...next].join(",");
+      router.replace(slugs ? `/compare?apis=${slugs}` : "/compare", { scroll: false });
+      return next;
+    });
+  }
+
+  const apis = [...selected].map(getApiBySlug).filter((a): a is Api => a !== undefined);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
@@ -143,33 +289,61 @@ function CompareContent() {
         Back to APIs
       </Link>
 
-      <div className="mb-10">
+      <div className="mb-8">
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">Compare APIs</h1>
-        <p className="text-base-content/50">
-          {apis.length > 0
-            ? `Comparing ${apis.length} API${apis.length !== 1 ? "s" : ""}`
-            : "Select APIs to compare by clicking the scale icon on any card"}
-        </p>
+        <p className="text-base-content/50">Select up to 4 APIs to compare side-by-side.</p>
       </div>
 
-      {apis.length === 0 ? (
-        <div className="text-center py-24 text-base-content/30 border border-dashed border-base-300 rounded-xl">
-          <p className="text-lg mb-3">No APIs selected</p>
-          <Link href="/" className="text-sm underline underline-offset-4 hover:text-base-content/60">
-            Browse APIs and add them to compare
-          </Link>
+      {/* Selected chips */}
+      {selected.size > 0 && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {apis.map((a) => (
+            <span
+              key={a.slug}
+              className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1 rounded-full border border-base-300 bg-base-200 text-sm font-medium"
+            >
+              {a.name}
+              <button
+                onClick={() => toggle(a.slug)}
+                className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-base-content/10 transition-colors"
+                aria-label={`Remove ${a.name}`}
+              >
+                <X size={10} />
+              </button>
+            </span>
+          ))}
+          {selected.size > 0 && (
+            <button
+              onClick={() => {
+                setSelected(new Set());
+                router.replace("/compare", { scroll: false });
+              }}
+              className="text-xs text-base-content/40 hover:text-base-content transition-colors self-center ml-1"
+            >
+              Clear all
+            </button>
+          )}
         </div>
-      ) : apis.length === 1 ? (
-        <div className="text-center py-16 text-base-content/40 border border-dashed border-base-300 rounded-xl">
-          <p className="mb-2">Add at least one more API to compare</p>
-          <Link href="/" className="text-sm underline underline-offset-4 hover:text-base-content/60">
-            Browse APIs
-          </Link>
-        </div>
-      ) : (
-        <CompareTable apis={apis} />
       )}
 
+      {/* Picker */}
+      <div className="mb-10">
+        <ApiPicker selected={selected} onToggle={toggle} />
+      </div>
+
+      {/* Compare table */}
+      {apis.length >= 2 ? (
+        <CompareTable apis={apis} onRemove={toggle} />
+      ) : (
+        <div className="text-center py-16 text-base-content/30 border border-dashed border-base-300 rounded-xl">
+          {apis.length === 0
+            ? <p>Select at least 2 APIs above to compare them</p>
+            : <p>Select one more API to start comparing</p>
+          }
+        </div>
+      )}
+
+      {/* Detail links */}
       {apis.length > 0 && (
         <div className="mt-8 flex flex-wrap gap-3">
           {apis.map((a) => (
@@ -178,7 +352,7 @@ function CompareContent() {
               href={`/apis/${a.slug}`}
               className="btn btn-ghost btn-sm border border-base-300 gap-1.5"
             >
-              View {a.name} docs →
+              View {a.name} →
             </Link>
           ))}
         </div>
@@ -192,7 +366,8 @@ export default function ComparePage() {
     <Suspense fallback={
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="h-8 w-48 rounded bg-base-300 animate-pulse mb-8" />
-        <div className="h-10 w-64 rounded bg-base-300 animate-pulse mb-10" />
+        <div className="h-10 w-64 rounded bg-base-300 animate-pulse mb-6" />
+        <div className="h-72 rounded-xl bg-base-200 animate-pulse mb-10" />
         <div className="h-96 rounded-xl bg-base-200 animate-pulse" />
       </div>
     }>
