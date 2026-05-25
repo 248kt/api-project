@@ -2888,37 +2888,977 @@ const openlibrary: Api = {
   ],
 };
 
+// ── AI & ML (continued) ──────────────────────────────────────
+
+const mistral: Api = {
+  slug: "mistral",
+  name: "Mistral AI",
+  tagline: "Fast, open-weight language models via API",
+  description: "Mistral AI offers high-performance open-weight LLMs including Mistral 7B, Mixtral 8x7B, and Mistral Large — accessible via a clean OpenAI-compatible REST API.",
+  category: "ai-ml",
+  baseUrl: "https://api.mistral.ai/v1",
+  authType: "bearer",
+  tags: ["LLM", "open-weight", "chat", "embeddings", "fast"],
+  docsUrl: "https://docs.mistral.ai",
+  websiteUrl: "https://mistral.ai",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/chat/completions",
+      description: "Generate a chat completion using Mistral models.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://api.mistral.ai/v1/chat/completions",
+        authType: "bearer",
+        body: { model: "mistral-large-latest", messages: [{ role: "user", content: "Explain transformers." }] },
+      }),
+      responsePreview: `{
+  "id": "cmpl-abc123",
+  "object": "chat.completion",
+  "model": "mistral-large-latest",
+  "choices": [{
+    "message": { "role": "assistant", "content": "Transformers are neural network architectures..." },
+    "finish_reason": "stop"
+  }],
+  "usage": { "prompt_tokens": 8, "completion_tokens": 42 }
+}`,
+    },
+  ],
+};
+
+const elevenlabs: Api = {
+  slug: "elevenlabs",
+  name: "ElevenLabs",
+  tagline: "Hyper-realistic AI voice synthesis",
+  description: "Convert text to speech with hyper-realistic AI voices, clone voices from audio samples, and build audio experiences with ElevenLabs' voice API.",
+  category: "ai-ml",
+  baseUrl: "https://api.elevenlabs.io/v1",
+  authType: "apiKey",
+  authHeader: "xi-api-key",
+  tags: ["text-to-speech", "voice cloning", "audio", "TTS", "synthesis"],
+  docsUrl: "https://elevenlabs.io/docs",
+  websiteUrl: "https://elevenlabs.io",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/text-to-speech/{voice_id}",
+      description: "Convert text to speech using a specific voice.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM",
+        authType: "apiKey",
+        authHeader: "xi-api-key",
+        body: { text: "Hello, world!", model_id: "eleven_monolingual_v1" },
+      }),
+      responsePreview: `// Returns raw audio bytes (audio/mpeg)
+// Save as .mp3 or stream directly to audio element`,
+    },
+    {
+      method: "GET",
+      path: "/voices",
+      description: "List all available voices.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.elevenlabs.io/v1/voices",
+        authType: "apiKey",
+        authHeader: "xi-api-key",
+      }),
+      responsePreview: `{
+  "voices": [{
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "name": "Rachel",
+    "category": "premade",
+    "labels": { "accent": "american", "age": "young" }
+  }]
+}`,
+    },
+  ],
+};
+
+const replicate: Api = {
+  slug: "replicate",
+  name: "Replicate",
+  tagline: "Run open-source ML models via API",
+  description: "Run thousands of open-source machine learning models — image generation, video, audio, language — with a single API call. No GPU setup required.",
+  category: "ai-ml",
+  baseUrl: "https://api.replicate.com/v1",
+  authType: "bearer",
+  tags: ["image generation", "models", "Stable Diffusion", "open-source", "GPU"],
+  docsUrl: "https://replicate.com/docs",
+  websiteUrl: "https://replicate.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/predictions",
+      description: "Run a model to create a prediction.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://api.replicate.com/v1/predictions",
+        authType: "bearer",
+        body: { version: "stability-ai/sdxl:latest", input: { prompt: "A photorealistic astronaut riding a horse" } },
+      }),
+      responsePreview: `{
+  "id": "xyz789pred",
+  "status": "starting",
+  "model": "stability-ai/sdxl",
+  "urls": { "get": "https://api.replicate.com/v1/predictions/xyz789pred" }
+}`,
+    },
+  ],
+};
+
+const stabilityai: Api = {
+  slug: "stability-ai",
+  name: "Stability AI",
+  tagline: "Generate and edit images with Stable Diffusion",
+  description: "Stability AI's REST API gives access to Stable Diffusion XL, image-to-image, inpainting, upscaling, and video generation at scale.",
+  category: "ai-ml",
+  baseUrl: "https://api.stability.ai/v2beta",
+  authType: "bearer",
+  tags: ["image generation", "Stable Diffusion", "SDXL", "inpainting", "upscale"],
+  docsUrl: "https://platform.stability.ai/docs/api-reference",
+  websiteUrl: "https://stability.ai",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/stable-image/generate/core",
+      description: "Generate an image from a text prompt.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://api.stability.ai/v2beta/stable-image/generate/core",
+        authType: "bearer",
+        body: { prompt: "A neon-lit cyberpunk street at night", output_format: "png" },
+      }),
+      responsePreview: `// Returns binary image data (PNG)
+// Set "Accept: image/*" header to receive raw image bytes`,
+    },
+  ],
+};
+
+const perplexity: Api = {
+  slug: "perplexity",
+  name: "Perplexity AI",
+  tagline: "Real-time web search + LLM reasoning",
+  description: "Perplexity's Sonar models combine real-time web search with LLM reasoning — get grounded, cited answers using an OpenAI-compatible API.",
+  category: "ai-ml",
+  baseUrl: "https://api.perplexity.ai",
+  authType: "bearer",
+  tags: ["search", "RAG", "citations", "real-time", "Sonar"],
+  docsUrl: "https://docs.perplexity.ai",
+  websiteUrl: "https://perplexity.ai",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/chat/completions",
+      description: "Get a grounded answer with real-time web citations.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://api.perplexity.ai/chat/completions",
+        authType: "bearer",
+        body: { model: "sonar", messages: [{ role: "user", content: "What happened in tech news today?" }] },
+      }),
+      responsePreview: `{
+  "choices": [{
+    "message": {
+      "role": "assistant",
+      "content": "Here are today's top tech stories..."
+    }
+  }],
+  "citations": ["https://techcrunch.com/...", "https://theverge.com/..."]
+}`,
+    },
+  ],
+};
+
+// ── Auth (continued) ──────────────────────────────────────────
+
+const workos: Api = {
+  slug: "workos",
+  name: "WorkOS",
+  tagline: "Enterprise SSO, SCIM, and directory sync",
+  description: "Add enterprise-grade authentication to your app in hours — Single Sign-On via SAML/OIDC, SCIM directory sync, and admin portal, all via a clean REST API.",
+  category: "auth",
+  baseUrl: "https://api.workos.com",
+  authType: "bearer",
+  tags: ["SSO", "SAML", "SCIM", "enterprise", "directory sync"],
+  docsUrl: "https://workos.com/docs",
+  websiteUrl: "https://workos.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/user_management/users",
+      description: "List all users in your WorkOS environment.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.workos.com/user_management/users",
+        authType: "bearer",
+      }),
+      responsePreview: `{
+  "data": [{
+    "object": "user",
+    "id": "user_01H7X3Y...",
+    "email": "alice@acme.com",
+    "first_name": "Alice",
+    "last_name": "Smith",
+    "email_verified": true,
+    "created_at": "2024-01-15T09:00:00Z"
+  }],
+  "list_metadata": { "after": null }
+}`,
+    },
+  ],
+};
+
+// ── Database (continued) ──────────────────────────────────────
+
+const turso: Api = {
+  slug: "turso",
+  name: "Turso",
+  tagline: "SQLite at the edge with libSQL",
+  description: "Turso provides edge-hosted SQLite databases powered by libSQL — query via HTTP anywhere, replicate globally, and embed databases close to your users.",
+  category: "database",
+  baseUrl: "https://{database}-{org}.turso.io",
+  authType: "bearer",
+  tags: ["SQLite", "edge", "libSQL", "replicated", "serverless"],
+  docsUrl: "https://docs.turso.tech",
+  websiteUrl: "https://turso.tech",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/v2/pipeline",
+      description: "Execute SQL statements against a Turso database.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://your-db-org.turso.io/v2/pipeline",
+        authType: "bearer",
+        body: { requests: [{ type: "execute", stmt: { sql: "SELECT * FROM users LIMIT 10" } }] },
+      }),
+      responsePreview: `{
+  "results": [{
+    "type": "ok",
+    "response": {
+      "type": "execute",
+      "result": {
+        "cols": [{ "name": "id" }, { "name": "email" }],
+        "rows": [["1", "alice@example.com"]]
+      }
+    }
+  }]
+}`,
+    },
+  ],
+};
+
+const convex: Api = {
+  slug: "convex",
+  name: "Convex",
+  tagline: "Reactive backend database with TypeScript",
+  description: "Convex is a reactive backend-as-a-service — define your database schema and server functions in TypeScript, and get real-time queries that update automatically.",
+  category: "database",
+  baseUrl: "https://{deployment}.convex.cloud",
+  authType: "bearer",
+  tags: ["real-time", "TypeScript", "reactive", "serverless", "BaaS"],
+  docsUrl: "https://docs.convex.dev",
+  websiteUrl: "https://convex.dev",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/api/query",
+      description: "Call a Convex query function.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://your-deployment.convex.cloud/api/query",
+        authType: "bearer",
+        body: { path: "tasks:getAll", args: {} },
+      }),
+      responsePreview: `{
+  "status": "success",
+  "value": [
+    { "_id": "jd7abc123", "text": "Buy groceries", "completed": false },
+    { "_id": "kx9xyz456", "text": "Write tests", "completed": true }
+  ]
+}`,
+    },
+  ],
+};
+
+const airtable: Api = {
+  slug: "airtable",
+  name: "Airtable",
+  tagline: "Database-spreadsheet hybrid with a REST API",
+  description: "Read and write data from any Airtable base — list records, create rows, filter and sort, and integrate structured data from team-managed spreadsheets.",
+  category: "database",
+  baseUrl: "https://api.airtable.com/v0",
+  authType: "bearer",
+  tags: ["spreadsheet", "no-code", "records", "CMS", "tables"],
+  docsUrl: "https://airtable.com/developers/web/api/introduction",
+  websiteUrl: "https://airtable.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/{baseId}/{tableIdOrName}",
+      description: "List records from an Airtable table.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.airtable.com/v0/appXXXXXXXX/Tasks?maxRecords=10&view=Grid+view",
+        authType: "bearer",
+      }),
+      responsePreview: `{
+  "records": [{
+    "id": "recABCDEF",
+    "createdTime": "2024-01-01T00:00:00.000Z",
+    "fields": {
+      "Name": "Launch campaign",
+      "Status": "In progress",
+      "Assignee": "Alice"
+    }
+  }]
+}`,
+    },
+  ],
+};
+
+// ── Storage (continued) ───────────────────────────────────────
+
+const cloudflareR2: Api = {
+  slug: "cloudflare-r2",
+  name: "Cloudflare R2",
+  tagline: "S3-compatible object storage with zero egress fees",
+  description: "Cloudflare R2 is S3-compatible object storage with zero egress costs — store and serve files globally without bandwidth charges.",
+  category: "storage",
+  baseUrl: "https://{accountId}.r2.cloudflarestorage.com",
+  authType: "bearer",
+  tags: ["S3-compatible", "egress-free", "CDN", "object storage", "global"],
+  docsUrl: "https://developers.cloudflare.com/r2",
+  websiteUrl: "https://cloudflare.com/developer-platform/r2",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "PUT",
+      path: "/{bucket}/{key}",
+      description: "Upload an object to an R2 bucket.",
+      codeExamples: generateCodeExamples({
+        method: "PUT",
+        url: "https://account-id.r2.cloudflarestorage.com/my-bucket/hello.txt",
+        authType: "bearer",
+        body: { data: "Hello, R2!" },
+      }),
+      responsePreview: `// HTTP 200 OK on success
+// ETag: "d3b07384..."
+// Content-Length: 0`,
+    },
+  ],
+};
+
+const backblaze: Api = {
+  slug: "backblaze-b2",
+  name: "Backblaze B2",
+  tagline: "Low-cost S3-compatible cloud storage",
+  description: "Backblaze B2 is S3-compatible cloud object storage at a fraction of AWS S3's cost — ideal for backups, media files, and large-scale storage.",
+  category: "storage",
+  baseUrl: "https://api.backblazeb2.com/b2api/v3",
+  authType: "apiKey",
+  authHeader: "Authorization",
+  tags: ["S3-compatible", "backups", "object storage", "cheap", "CDN"],
+  docsUrl: "https://www.backblaze.com/apidocs/introduction-to-the-b2-native-api",
+  websiteUrl: "https://backblaze.com/cloud-storage",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/b2_list_buckets",
+      description: "List all buckets in your B2 account.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.backblazeb2.com/b2api/v3/b2_list_buckets?accountId=YOUR_ACCOUNT_ID",
+        authType: "bearer",
+      }),
+      responsePreview: `{
+  "buckets": [{
+    "accountId": "YOUR_ACCOUNT_ID",
+    "bucketId": "e73ede9969c64c3db4cc",
+    "bucketName": "my-media-bucket",
+    "bucketType": "allPrivate",
+    "lifecycleRules": []
+  }]
+}`,
+    },
+  ],
+};
+
+// ── Communication (continued) ─────────────────────────────────
+
+const onesignal: Api = {
+  slug: "onesignal",
+  name: "OneSignal",
+  tagline: "Push notifications for web and mobile apps",
+  description: "Send push notifications, in-app messages, SMS, and email to any device. OneSignal's free tier supports unlimited subscribers and 10,000 emails/month.",
+  category: "communication",
+  baseUrl: "https://api.onesignal.com",
+  authType: "bearer",
+  tags: ["push notifications", "mobile", "web push", "in-app", "SMS"],
+  docsUrl: "https://documentation.onesignal.com/reference",
+  websiteUrl: "https://onesignal.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/notifications",
+      description: "Send a push notification to subscribed users.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://api.onesignal.com/notifications",
+        authType: "bearer",
+        body: { app_id: "YOUR_APP_ID", included_segments: ["All"], headings: { en: "New update!" }, contents: { en: "Version 2.0 is live." } },
+      }),
+      responsePreview: `{
+  "id": "458dcec4-cf53-11e3-add2-000c2940e62c",
+  "recipients": 5142,
+  "external_id": null
+}`,
+    },
+  ],
+};
+
+const discordWebhooks: Api = {
+  slug: "discord-webhooks",
+  name: "Discord Webhooks",
+  tagline: "Post messages to Discord channels without OAuth",
+  description: "Discord Webhooks let you send richly formatted messages to any Discord channel using a simple POST request — no OAuth or bot setup required.",
+  category: "communication",
+  baseUrl: "https://discord.com/api/webhooks",
+  authType: "none",
+  tags: ["Discord", "webhooks", "notifications", "embeds", "no auth"],
+  docsUrl: "https://discord.com/developers/docs/resources/webhook",
+  websiteUrl: "https://discord.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/{webhook.id}/{webhook.token}",
+      description: "Send a message to a Discord channel via webhook.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://discord.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN",
+        authType: "none",
+        body: { content: "Hello from APIYard!", username: "APIYard Bot", embeds: [{ title: "Deployment complete", color: 5763719 }] },
+      }),
+      responsePreview: `// HTTP 204 No Content on success
+// The message is now visible in the Discord channel`,
+    },
+  ],
+};
+
+// ── DevOps (continued) ────────────────────────────────────────
+
+const cloudflare: Api = {
+  slug: "cloudflare",
+  name: "Cloudflare",
+  tagline: "DNS, CDN, Workers, and security via API",
+  description: "Manage DNS records, configure caching rules, deploy Workers scripts, set up firewall rules, and control your entire Cloudflare stack programmatically.",
+  category: "devops",
+  baseUrl: "https://api.cloudflare.com/client/v4",
+  authType: "bearer",
+  tags: ["DNS", "CDN", "Workers", "firewall", "edge"],
+  docsUrl: "https://developers.cloudflare.com/api",
+  websiteUrl: "https://cloudflare.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/zones/{zone_id}/dns_records",
+      description: "List DNS records for a zone.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.cloudflare.com/client/v4/zones/ZONE_ID/dns_records?type=A",
+        authType: "bearer",
+      }),
+      responsePreview: `{
+  "result": [{
+    "id": "372e67954025e0ba6aaa6d586b9e0b59",
+    "type": "A",
+    "name": "example.com",
+    "content": "198.51.100.4",
+    "proxied": true,
+    "ttl": 1
+  }],
+  "success": true
+}`,
+    },
+  ],
+};
+
+const railway: Api = {
+  slug: "railway",
+  name: "Railway",
+  tagline: "Deploy services and databases in seconds",
+  description: "Railway's API lets you programmatically manage projects, services, deployments, and environment variables — the fastest way to ship backends and databases.",
+  category: "devops",
+  baseUrl: "https://backboard.railway.app/graphql/v2",
+  authType: "bearer",
+  tags: ["deployment", "databases", "services", "CI/CD", "serverless"],
+  docsUrl: "https://docs.railway.com/reference/public-api",
+  websiteUrl: "https://railway.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/",
+      description: "Query Railway via GraphQL — list projects and deployments.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://backboard.railway.app/graphql/v2",
+        authType: "bearer",
+        body: { query: "{ me { projects { edges { node { id name } } } } }" },
+      }),
+      responsePreview: `{
+  "data": {
+    "me": {
+      "projects": {
+        "edges": [
+          { "node": { "id": "abc123", "name": "my-app" } }
+        ]
+      }
+    }
+  }
+}`,
+    },
+  ],
+};
+
+const linear: Api = {
+  slug: "linear",
+  name: "Linear",
+  tagline: "Project management and issue tracking API",
+  description: "Linear's GraphQL API gives full access to teams, projects, issues, cycles, and comments — perfect for automating developer workflows and integrating with your toolchain.",
+  category: "devops",
+  baseUrl: "https://api.linear.app/graphql",
+  authType: "bearer",
+  tags: ["project management", "issues", "GraphQL", "sprints", "automation"],
+  docsUrl: "https://developers.linear.app/docs",
+  websiteUrl: "https://linear.app",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/",
+      description: "Query issues assigned to the authenticated user.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://api.linear.app/graphql",
+        authType: "bearer",
+        body: { query: "{ viewer { assignedIssues { nodes { title priority state { name } } } } }" },
+      }),
+      responsePreview: `{
+  "data": {
+    "viewer": {
+      "assignedIssues": {
+        "nodes": [
+          { "title": "Fix auth bug", "priority": 1, "state": { "name": "In Progress" } }
+        ]
+      }
+    }
+  }
+}`,
+    },
+  ],
+};
+
+// ── Social (continued) ────────────────────────────────────────
+
+const twitter: Api = {
+  slug: "twitter",
+  name: "X (Twitter) API v2",
+  tagline: "Tweets, users, trends, and social graph",
+  description: "Access tweets, users, timelines, trends, and the social graph via X's v2 API — search recent tweets, post on behalf of users, and stream real-time data.",
+  category: "social",
+  baseUrl: "https://api.twitter.com/2",
+  authType: "bearer",
+  tags: ["tweets", "users", "timeline", "search", "OAuth 2.0"],
+  docsUrl: "https://developer.twitter.com/en/docs/twitter-api",
+  websiteUrl: "https://developer.twitter.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/tweets/search/recent",
+      description: "Search for recent tweets matching a query.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.twitter.com/2/tweets/search/recent?query=%23buildinpublic&tweet.fields=created_at,author_id&max_results=10",
+        authType: "bearer",
+      }),
+      responsePreview: `{
+  "data": [{
+    "id": "1234567890",
+    "text": "Launched v2 today! #buildinpublic",
+    "created_at": "2024-05-01T12:00:00Z",
+    "author_id": "98765"
+  }],
+  "meta": { "result_count": 10, "newest_id": "1234567890" }
+}`,
+    },
+  ],
+};
+
+const discord: Api = {
+  slug: "discord",
+  name: "Discord API",
+  tagline: "Build bots, read channels, and manage servers",
+  description: "The Discord REST API lets you build bots and integrations — read messages, manage guild members, create channels, assign roles, and react to events.",
+  category: "social",
+  baseUrl: "https://discord.com/api/v10",
+  authType: "bearer",
+  tags: ["bots", "guilds", "channels", "messages", "OAuth 2.0"],
+  docsUrl: "https://discord.com/developers/docs",
+  websiteUrl: "https://discord.com/developers",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/guilds/{guild.id}/members",
+      description: "List members of a Discord server.",
+      codeExamples: generateCodeExamples({
+        url: "https://discord.com/api/v10/guilds/GUILD_ID/members?limit=100",
+        authType: "bearer",
+      }),
+      responsePreview: `[{
+  "user": {
+    "id": "80351110224678912",
+    "username": "Nelly",
+    "discriminator": "1337",
+    "avatar": "8342729096ea3675442027381ff50dfe"
+  },
+  "roles": ["431930842472013825"],
+  "joined_at": "2015-04-26T06:26:56.936000+00:00"
+}]`,
+    },
+  ],
+};
+
+const slack: Api = {
+  slug: "slack",
+  name: "Slack API",
+  tagline: "Messages, channels, and workflows in Slack",
+  description: "Send messages, create channels, manage users, and build Slack apps using the Web API and Webhooks — integrates with any backend.",
+  category: "social",
+  baseUrl: "https://slack.com/api",
+  authType: "bearer",
+  tags: ["messages", "channels", "bots", "webhooks", "notifications"],
+  docsUrl: "https://api.slack.com/methods",
+  websiteUrl: "https://api.slack.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "POST",
+      path: "/chat.postMessage",
+      description: "Send a message to a Slack channel.",
+      codeExamples: generateCodeExamples({
+        method: "POST",
+        url: "https://slack.com/api/chat.postMessage",
+        authType: "bearer",
+        body: { channel: "#general", text: "Hello from APIYard!", blocks: [] },
+      }),
+      responsePreview: `{
+  "ok": true,
+  "channel": "C024BE91L",
+  "ts": "1503435956.000247",
+  "message": {
+    "text": "Hello from APIYard!",
+    "username": "My Bot",
+    "type": "message"
+  }
+}`,
+    },
+    {
+      method: "GET",
+      path: "/conversations.list",
+      description: "List all channels in a Slack workspace.",
+      codeExamples: generateCodeExamples({
+        url: "https://slack.com/api/conversations.list?types=public_channel&limit=20",
+        authType: "bearer",
+      }),
+      responsePreview: `{
+  "ok": true,
+  "channels": [{
+    "id": "C024BE91L",
+    "name": "general",
+    "is_member": true,
+    "num_members": 42
+  }],
+  "response_metadata": { "next_cursor": "" }
+}`,
+    },
+  ],
+};
+
+// ── Entertainment (continued) ─────────────────────────────────
+
+const twitch: Api = {
+  slug: "twitch",
+  name: "Twitch Helix",
+  tagline: "Streams, games, clips, and channel data",
+  description: "Access live streams, channel data, top games, clips, follows, and subscriptions via Twitch's Helix API — perfect for dashboards and stream tooling.",
+  category: "entertainment",
+  baseUrl: "https://api.twitch.tv/helix",
+  authType: "bearer",
+  tags: ["streams", "gaming", "clips", "OAuth 2.0", "live"],
+  docsUrl: "https://dev.twitch.tv/docs/api",
+  websiteUrl: "https://dev.twitch.tv",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/streams",
+      description: "Get currently live streams with optional filters.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.twitch.tv/helix/streams?game_id=21779&first=10",
+        authType: "bearer",
+      }),
+      responsePreview: `{
+  "data": [{
+    "id": "123456789",
+    "user_name": "xQc",
+    "game_name": "Just Chatting",
+    "title": "!gamba | big plays",
+    "viewer_count": 42000,
+    "started_at": "2024-05-01T14:00:00Z",
+    "thumbnail_url": "https://static-cdn.jtvnw.net/previews-ttv/..."
+  }]
+}`,
+    },
+  ],
+};
+
+const lastfm: Api = {
+  slug: "lastfm",
+  name: "Last.fm",
+  tagline: "Music listening history, charts, and artist data",
+  description: "Access Last.fm's music data — top charts, artist biographies, similar artists, user listening history, and scrobble tracking.",
+  category: "entertainment",
+  baseUrl: "https://ws.audioscrobbler.com/2.0",
+  authType: "apiKey",
+  authQuery: "api_key",
+  tags: ["music", "charts", "scrobbling", "artists", "history"],
+  docsUrl: "https://www.last.fm/api",
+  websiteUrl: "https://last.fm",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/",
+      description: "Fetch global top tracks from Last.fm charts.",
+      codeExamples: generateCodeExamples({
+        url: "https://ws.audioscrobbler.com/2.0/?method=chart.getTopTracks&api_key=YOUR_KEY&format=json&limit=5",
+        authType: "apiKey",
+        authQuery: "api_key",
+      }),
+      responsePreview: `{
+  "tracks": {
+    "track": [{
+      "name": "Blinding Lights",
+      "artist": { "name": "The Weeknd" },
+      "playcount": "2141900",
+      "listeners": "982000",
+      "url": "https://www.last.fm/music/The+Weeknd/_/Blinding+Lights"
+    }]
+  }
+}`,
+    },
+  ],
+};
+
+// ── Developer (continued) ─────────────────────────────────────
+
+const dicebear: Api = {
+  slug: "dicebear",
+  name: "DiceBear",
+  tagline: "Generate avatar images from any seed string",
+  description: "DiceBear generates deterministic SVG avatars from any seed string — pick from 50+ styles including pixel art, illustrated characters, and abstract shapes.",
+  category: "developer",
+  baseUrl: "https://api.dicebear.com/9.x",
+  authType: "none",
+  tags: ["avatars", "SVG", "generated", "free", "no auth"],
+  docsUrl: "https://www.dicebear.com/how-to-use/http-api",
+  websiteUrl: "https://dicebear.com",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/{style}/svg",
+      description: "Generate an SVG avatar using a style and seed.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.dicebear.com/9.x/adventurer/svg?seed=Felix&radius=50",
+        authType: "none",
+      }),
+      responsePreview: `// Returns SVG image data
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Deterministic avatar based on seed "Felix" -->
+  <circle cx="60" cy="60" r="50" fill="#b6e3f4"/>
+  ...
+</svg>`,
+    },
+  ],
+};
+
+const fakerapi: Api = {
+  slug: "fakerapi",
+  name: "FakerAPI",
+  tagline: "Generate fake datasets for testing",
+  description: "FakerAPI generates realistic fake data on demand — persons, addresses, companies, credit cards, images, and more — no auth required.",
+  category: "developer",
+  baseUrl: "https://fakerapi.it/api/v2",
+  authType: "none",
+  tags: ["fake data", "testing", "seed", "mock", "no auth"],
+  docsUrl: "https://fakerapi.it/en",
+  websiteUrl: "https://fakerapi.it",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/persons",
+      description: "Generate fake person records.",
+      codeExamples: generateCodeExamples({
+        url: "https://fakerapi.it/api/v2/persons?_quantity=3&_locale=en_US",
+        authType: "none",
+      }),
+      responsePreview: `{
+  "status": "OK",
+  "total": 3,
+  "data": [{
+    "id": 1,
+    "firstname": "Emma",
+    "lastname": "Johnson",
+    "email": "emma.johnson@example.com",
+    "phone": "+1-555-234-5678",
+    "birthday": "1992-08-14",
+    "address": { "city": "Denver", "country": "United States" }
+  }]
+}`,
+    },
+  ],
+};
+
+// ── Finance (continued) ───────────────────────────────────────
+
+const polygon: Api = {
+  slug: "polygon",
+  name: "Polygon.io",
+  tagline: "Real-time and historical stock market data",
+  description: "Polygon.io provides real-time and historical data for stocks, options, forex, and crypto — trades, quotes, aggregates, and company fundamentals.",
+  category: "finance",
+  baseUrl: "https://api.polygon.io",
+  authType: "apiKey",
+  authQuery: "apiKey",
+  tags: ["stocks", "options", "forex", "crypto", "real-time"],
+  docsUrl: "https://polygon.io/docs",
+  websiteUrl: "https://polygon.io",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to}",
+      description: "Get OHLCV aggregate bars for a stock ticker.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2024-01-01/2024-01-31",
+        authType: "apiKey",
+        authQuery: "apiKey",
+      }),
+      responsePreview: `{
+  "ticker": "AAPL",
+  "resultsCount": 23,
+  "results": [{
+    "v": 72143000,
+    "o": 186.09,
+    "c": 185.92,
+    "h": 188.44,
+    "l": 185.83,
+    "t": 1704067200000,
+    "n": 783456
+  }]
+}`,
+    },
+  ],
+};
+
+// ── Security (continued) ──────────────────────────────────────
+
+const shodan: Api = {
+  slug: "shodan",
+  name: "Shodan",
+  tagline: "Internet-wide device and service intelligence",
+  description: "Shodan continuously scans the internet — search for exposed services, open ports, banners, and vulnerabilities on any IP or domain.",
+  category: "security",
+  baseUrl: "https://api.shodan.io",
+  authType: "apiKey",
+  authQuery: "key",
+  tags: ["OSINT", "ports", "services", "CVEs", "threat intel"],
+  docsUrl: "https://developer.shodan.io/api",
+  websiteUrl: "https://shodan.io",
+  freeTier: true,
+  endpoints: [
+    {
+      method: "GET",
+      path: "/shodan/host/{ip}",
+      description: "Look up all information for a specific IP address.",
+      codeExamples: generateCodeExamples({
+        url: "https://api.shodan.io/shodan/host/8.8.8.8",
+        authType: "apiKey",
+        authQuery: "key",
+      }),
+      responsePreview: `{
+  "ip_str": "8.8.8.8",
+  "org": "Google LLC",
+  "country_name": "United States",
+  "ports": [53, 443],
+  "vulns": [],
+  "data": [{
+    "port": 53,
+    "transport": "udp",
+    "product": "Google public DNS"
+  }]
+}`,
+    },
+  ],
+};
+
 // ── Export ────────────────────────────────────────────────────
 
 export const APIS: Api[] = [
   // AI & ML
   openai, anthropic, huggingface, googleGemini,
+  mistral, elevenlabs, replicate, stabilityai, perplexity,
   // Auth
-  clerk, auth0, firebaseAuth, supabaseAuth,
+  clerk, auth0, firebaseAuth, supabaseAuth, workos,
   // Payments
   stripe, paypal, lemonSqueezy, paddle,
   // Database
   supabase, firebase, neon, planetscale, mongodbAtlas,
+  turso, convex, airtable,
   // Storage
   cloudinary, uploadthing, awsS3, imagekit,
+  cloudflareR2, backblaze,
   // Search
   algolia, meilisearch, typesense,
   // Analytics
   posthog, googleAnalytics, plausible, mixpanel,
   // Communication
-  resend, sendgrid, twilio, mailgun,
+  resend, sendgrid, twilio, mailgun, onesignal, discordWebhooks,
   // Maps
   googlemaps, mapbox, nominatim, radar,
   // Weather
   openweather, weatherapi,
   // Finance
-  coingecko, alphavantage, finnhub,
+  coingecko, alphavantage, finnhub, polygon,
   // DevOps
-  github, vercel, netlify, dockerHub,
+  github, vercel, netlify, dockerHub, cloudflare, railway, linear,
   // Social
-  reddit,
+  reddit, twitter, discord, slack,
   // Entertainment
-  spotify, tmdb, youtube, googleBooks,
+  spotify, tmdb, youtube, googleBooks, twitch, lastfm,
   // News
   newsapi, gnews, guardian,
   // Jobs
@@ -2929,10 +3869,11 @@ export const APIS: Api[] = [
   nutritionix, openfda,
   // Developer
   pokeapi, jsonplaceholder, qrserver, ipapi, ipinfo, randomuser,
+  dicebear, fakerapi,
   // E-commerce
   shopify,
   // Security
-  hibp, virustotal,
+  hibp, virustotal, shodan,
   // Government
   nasa, openlibrary,
 ];

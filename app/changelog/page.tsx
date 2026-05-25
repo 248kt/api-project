@@ -9,6 +9,24 @@ export const metadata: Metadata = {
 
 const ENTRIES = [
   {
+    date: "June 2026",
+    title: "25 new APIs — AI, social, DevOps & more",
+    items: [
+      "Added AI & ML: Mistral AI, ElevenLabs (voice synthesis), Replicate, Stability AI, Perplexity AI",
+      "Added Auth: WorkOS (enterprise SSO + SCIM)",
+      "Added Database: Turso (libSQL edge), Convex, Airtable",
+      "Added Storage: Cloudflare R2, Backblaze B2",
+      "Added Communication: OneSignal (push notifications), Discord Webhooks",
+      "Added DevOps: Cloudflare API, Railway, Linear",
+      "Added Social: X (Twitter) API v2, Discord API, Slack API",
+      "Added Entertainment: Twitch Helix, Last.fm",
+      "Added Developer: DiceBear Avatars, FakerAPI",
+      "Added Finance: Polygon.io",
+      "Added Security: Shodan",
+      "APIYard now has 96 curated APIs across 22 categories",
+    ],
+  },
+  {
     date: "May 2026",
     title: "41 new APIs + major feature update",
     items: [
