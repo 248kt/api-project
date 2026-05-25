@@ -6,6 +6,7 @@ import { CATEGORIES } from "@/data/categories";
 import { CodeBlock } from "@/components/CodeBlock";
 import { AnimatedHeader, AnimatedEndpoints, AnimatedEndpoint } from "@/components/ApiDetailMotion";
 import { ApiCard } from "@/components/ApiCard";
+import { TryItPanel } from "@/components/TryItPanel";
 import type { Metadata } from "next";
 import type { Language } from "@/lib/codeGen";
 
@@ -162,6 +163,8 @@ export default async function ApiDetailPage({ params }: Props) {
                     examples={endpoint.codeExamples as Record<Language, string>}
                     title={endpoint.path}
                   />
+
+                  <TryItPanel api={api} endpoint={endpoint} />
 
                   <div>
                     <p className="text-xs font-medium text-base-content/40 uppercase tracking-widest mb-2">
