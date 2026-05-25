@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, ExternalLink, Globe, X, Check, Minus, Search, Plus } from "lucide-react";
 import { APIS, getApiBySlug } from "@/data/apis";
 import { CATEGORIES } from "@/data/categories";
+import { getApiMeta } from "@/data/apiMeta";
 import type { Api } from "@/data/apis";
 
 // ── Auth labels ────────────────────────────────────────────────
@@ -13,25 +14,94 @@ const AUTH_LABELS: Record<string, string> = {
   none: "No Auth", apiKey: "API Key", bearer: "Bearer", oauth2: "OAuth 2.0",
 };
 
+const LATENCY_LABEL: Record<string, { label: string; class: string }> = {
+  low:    { label: "Low",    class: "text-emerald-500" },
+  medium: { label: "Medium", class: "text-amber-500"   },
+  high:   { label: "High",   class: "text-red-400"     },
+};
+
 // ── Compare table ──────────────────────────────────────────────
 function CompareTable({ apis, onRemove }: { apis: Api[]; onRemove: (slug: string) => void }) {
-  const rows: { label: string; render: (a: Api) => React.ReactNode }[] = [
+  const rows: { label: string; group?: string; render: (a: Api) => React.ReactNode }[] = [
+    // Overview
     {
       label: "Category",
+      group: "Overview",
       render: (a) => CATEGORIES.find((c) => c.slug === a.category)?.label ?? a.category,
     },
     {
-      label: "Auth",
+      label: "Auth type",
       render: (a) => AUTH_LABELS[a.authType],
     },
     {
+      label: "Protocol",
+      render: (a) => {
+        const m = getApiMeta(a.slug);
+        if (!m.protocol?.length) return <span className="text-base-content/30">—</span>;
+        return (
+          <div className="flex flex-wrap gap-1">
+            {m.protocol.map((p) => (
+              <span key={p} className="text-xs px-2 py-0.5 rounded-full bg-base-300 text-base-content/70">{p}</span>
+            ))}
+          </div>
+        );
+      },
+    },
+    {
+      label: "Latency",
+      render: (a) => {
+        const m = getApiMeta(a.slug);
+        if (!m.latency) return <span className="text-base-content/30">—</span>;
+        const { label, class: cls } = LATENCY_LABEL[m.latency];
+        return <span className={`font-medium ${cls}`}>{label}</span>;
+      },
+    },
+
+    // Pricing
+    {
       label: "Free tier",
-      render: (a) =>
-        a.freeTier ? (
-          <span className="inline-flex items-center gap-1 text-emerald-500"><Check size={13} /> Yes</span>
-        ) : (
-          <span className="inline-flex items-center gap-1 text-base-content/30"><Minus size={13} /> No</span>
-        ),
+      group: "Pricing",
+      render: (a) => {
+        const m = getApiMeta(a.slug);
+        const free = m.pricing?.free;
+        if (free) return <span className="text-emerald-500 text-sm">{free}</span>;
+        return a.freeTier
+          ? <span className="inline-flex items-center gap-1 text-emerald-500"><Check size={13} /> Yes</span>
+          : <span className="inline-flex items-center gap-1 text-base-content/30"><Minus size={13} /> No</span>;
+      },
+    },
+    {
+      label: "Paid pricing",
+      render: (a) => {
+        const m = getApiMeta(a.slug);
+        if (!m.pricing?.paid) return <span className="text-base-content/30">—</span>;
+        return <span className="text-sm">{m.pricing.paid}</span>;
+      },
+    },
+    {
+      label: "Rate limit",
+      render: (a) => {
+        const m = getApiMeta(a.slug);
+        if (!m.rateLimit) return <span className="text-base-content/30">—</span>;
+        return <span className="text-sm">{m.rateLimit}</span>;
+      },
+    },
+
+    // Developer experience
+    {
+      label: "Official SDKs",
+      group: "Developer experience",
+      render: (a) => {
+        const m = getApiMeta(a.slug);
+        if (!m.sdks?.length) return <span className="text-base-content/30">—</span>;
+        return (
+          <div className="flex flex-wrap gap-1">
+            {m.sdks.map((s) => (
+              <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-base-300 text-base-content/70">{s}</span>
+            ))}
+          </div>
+        );
+      },
     },
     {
       label: "Base URL",
@@ -40,14 +110,10 @@ function CompareTable({ apis, onRemove }: { apis: Api[]; onRemove: (slug: string
       ),
     },
     {
-      label: "Endpoints",
-      render: (a) => `${a.endpoints.length} example${a.endpoints.length !== 1 ? "s" : ""}`,
-    },
-    {
       label: "Tags",
       render: (a) => (
         <div className="flex flex-wrap gap-1">
-          {a.tags.slice(0, 4).map((t) => (
+          {a.tags.slice(0, 5).map((t) => (
             <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-base-300 text-base-content/70">{t}</span>
           ))}
         </div>
@@ -100,17 +166,26 @@ function CompareTable({ apis, onRemove }: { apis: Api[]; onRemove: (slug: string
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ label, render }) => (
-            <tr key={label} className="border-b border-base-300/50 hover:bg-base-200/40">
-              <td className="py-4 pr-6 pl-5 text-xs font-medium text-base-content/40 uppercase tracking-widest align-top">
-                {label}
-              </td>
-              {apis.map((a) => (
-                <td key={a.slug} className="py-4 px-4 align-top text-base-content/80">
-                  {render(a)}
+          {rows.map(({ label, group, render }) => (
+            <>
+              {group && (
+                <tr key={`group-${group}`} className="border-b border-base-300 bg-base-200/60">
+                  <td colSpan={apis.length + 1} className="px-5 py-2 text-[11px] font-semibold text-base-content/40 uppercase tracking-widest">
+                    {group}
+                  </td>
+                </tr>
+              )}
+              <tr key={label} className="border-b border-base-300/50 hover:bg-base-200/40">
+                <td className="py-3.5 pr-6 pl-5 text-xs font-medium text-base-content/40 uppercase tracking-widest align-top whitespace-nowrap">
+                  {label}
                 </td>
-              ))}
-            </tr>
+                {apis.map((a) => (
+                  <td key={a.slug} className="py-3.5 px-4 align-top text-base-content/80">
+                    {render(a)}
+                  </td>
+                ))}
+              </tr>
+            </>
           ))}
         </tbody>
       </table>
