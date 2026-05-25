@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const ENTRIES = [
   {
-    date: "June 2026",
+    date: "May 25, 2026",
     title: "25 new APIs — AI, social, DevOps & more",
     items: [
       "Added AI & ML: Mistral AI, ElevenLabs (voice synthesis), Replicate, Stability AI, Perplexity AI",
@@ -27,7 +27,7 @@ const ENTRIES = [
     ],
   },
   {
-    date: "May 2026",
+    date: "May 20, 2026",
     title: "41 new APIs + major feature update",
     items: [
       "Added Auth category: Clerk, Auth0, Firebase Auth, Supabase Auth",
@@ -56,7 +56,7 @@ const ENTRIES = [
     ],
   },
   {
-    date: "April 2026",
+    date: "May 15, 2026",
     title: "Initial launch — 29 APIs",
     items: [
       "Launched APIYard with 29 curated APIs",
