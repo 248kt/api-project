@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const api = getApiBySlug(slug);
   if (!api) return {};
   return {
-    title: `${api.name} — Devdex`,
+    title: `${api.name} — APIYard`,
     description: api.description,
   };
 }

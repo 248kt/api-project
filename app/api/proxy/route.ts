@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   try {
     const host = new URL(url).hostname;
     if (!ALLOWED_HOSTS.has(host)) {
-      return NextResponse.json({ error: `Host "${host}" is not in the Devdex catalog` }, { status: 403 });
+      return NextResponse.json({ error: `Host "${host}" is not in the APIYard catalog` }, { status: 403 });
     }
   } catch {
     return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   try {
     const upstream = await fetch(url, {
       method,
-      headers: { "User-Agent": "devdex/1.0 (try-it)", ...headers },
+      headers: { "User-Agent": "apiyard/1.0 (try-it)", ...headers },
       body: body && method !== "GET" ? body : undefined,
       signal: AbortSignal.timeout(10_000),
     });

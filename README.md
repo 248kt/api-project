@@ -1,4 +1,4 @@
-# Devdex
+# APIYard
 
 A curated directory of 70+ public APIs with live code examples, a Try It panel, and side-by-side compare. Free to use at [api-project-xi-kohl.vercel.app](https://api-project-xi-kohl.vercel.app).
 

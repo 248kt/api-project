@@ -9,7 +9,7 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata: Metadata = {
-  title: "Devdex — Discover APIs",
+  title: "APIYard — Discover APIs",
   description: "Browse 70+ APIs across 22 categories with live code examples, a Try It panel, and side-by-side compare.",
 };
 
